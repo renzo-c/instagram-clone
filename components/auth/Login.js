@@ -3,7 +3,7 @@ import { View, Button, TextInput } from "react-native";
 
 import firebase from "firebase";
 
-const Register = () => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -23,9 +23,9 @@ const Register = () => {
         secureTextEntry={true}
         onChangeText={(password) => setPassword(password)}
       />
-      <Button onPress={onSignIn} title="Sign Up" />
+      <Button onPress={onSignIn} title="Login" />
     </View>
   );
 };
 
-export default Register;
+export default Login;
