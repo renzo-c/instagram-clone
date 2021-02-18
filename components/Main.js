@@ -1,26 +1,31 @@
 import React, { useEffect } from "react";
 
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { Text, View } from "react-native";
 
 import FeedScreen from "./main/Feed";
 import ProfileScreen from "./main/Profile";
+import SearchScreen from "./main/Search";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { fetchUser } from "../redux/actions/index";
+import { fetchUserFollowing, fetchUser, fetchUserPosts } from "../redux/actions/index";
+
+import firebase from 'firebase';
 
 const Tab = createMaterialBottomTabNavigator();
 
 const EmptyScreen = () => null;
 
 const Main = (props) => {
-  const { fetchUser, currentUser } = props;
+  const { fetchUserFollowing, fetchUser, fetchUserPosts, currentUser } = props;
 
   useEffect(() => {
     fetchUser();
+    fetchUserPosts();
+    fetchUserFollowing();
   }, []);
 
   if (currentUser === undefined) {
@@ -35,6 +40,15 @@ const Main = (props) => {
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home" color={color} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="magnify" color={color} size={26} />
           ),
         }}
       />
@@ -55,6 +69,12 @@ const Main = (props) => {
       />
       <Tab.Screen
         name="Profile"
+        listeners={({ navigation }) => ({
+          tabPress: (event) => {
+            event.preventDefault();
+            navigation.navigate("Profile", {uid: firebase.auth().currentUser.uid});
+          },
+        })}
         component={ProfileScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -71,7 +91,7 @@ const Main = (props) => {
 };
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ fetchUser }, dispatch);
+  bindActionCreators({ fetchUser, fetchUserPosts, fetchUserFollowing }, dispatch);
 
 const mapStateToProps = (store) => ({
   currentUser: store.userState.currentUser,
