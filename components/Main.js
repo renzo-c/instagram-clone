@@ -23,6 +23,7 @@ const Main = (props) => {
   const { fetchUserFollowing, fetchUser, fetchUserPosts, currentUser } = props;
 
   useEffect(() => {
+    console.log("fetching")
     fetchUser();
     fetchUserPosts();
     fetchUserFollowing();

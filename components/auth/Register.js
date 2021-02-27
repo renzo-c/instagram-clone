@@ -17,7 +17,7 @@ const Register = () => {
           .firestore()
           .collection("users")
           .doc(firebase.auth().currentUser.uid)
-          .set({ name, email, password })
+          .set({ name, email })
       )
       .catch((error) => console.log(error));
   };

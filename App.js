@@ -23,7 +23,7 @@ import rootReducer from "./redux/reducers";
 import thunk from "redux-thunk";
 
 // Temporarily hides warning about Setting a timer for a long period of time
-LogBox.ignoreLogs(['Setting a timer']);
+// LogBox.ignoreLogs(['Setting a timer']);
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
