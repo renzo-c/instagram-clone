@@ -37,6 +37,10 @@ const Profile = (props) => {
       .delete();
   };
 
+  const onLogout = () => {
+    firebase.auth().signOut()
+  }
+
   useEffect(() => {
     const runThis = () => {
       if (firebase.auth().currentUser.uid === uid) {
@@ -99,7 +103,7 @@ const Profile = (props) => {
               <Button title="Follow" onPress={onFollow} />
             )}
           </View>
-        ) : null}
+        ) : <Button title="Logout" onPress={onLogout}/> }
       </View>
       <View style={styles.containerGallery}>
         <FlatList
