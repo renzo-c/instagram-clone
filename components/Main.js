@@ -11,7 +11,7 @@ import SearchScreen from "./main/Search";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { fetchUserFollowing, fetchUser, fetchUserPosts } from "../redux/actions/index";
+import { clearData, fetchUserFollowing, fetchUser, fetchUserPosts } from "../redux/actions/index";
 
 import firebase from 'firebase';
 
@@ -20,10 +20,10 @@ const Tab = createMaterialBottomTabNavigator();
 const EmptyScreen = () => null;
 
 const Main = (props) => {
-  const { fetchUserFollowing, fetchUser, fetchUserPosts, currentUser } = props;
+  const { clearData, fetchUserFollowing, fetchUser, fetchUserPosts, currentUser } = props;
 
   useEffect(() => {
-    console.log("fetching")
+    clearData();
     fetchUser();
     fetchUserPosts();
     fetchUserFollowing();
@@ -92,7 +92,7 @@ const Main = (props) => {
 };
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ fetchUser, fetchUserPosts, fetchUserFollowing }, dispatch);
+  bindActionCreators({ clearData, fetchUser, fetchUserPosts, fetchUserFollowing }, dispatch);
 
 const mapStateToProps = (store) => ({
   currentUser: store.userState.currentUser,

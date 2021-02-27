@@ -10,8 +10,8 @@ import "firebase/firestore";
 const Feed = (props) => {
   const [posts, setPosts] = useState([]);
     const {following, users, usersLoaded} = props
-console.log(posts)
-  useEffect(() => {
+
+    useEffect(() => {
       let posts = [];
       if (usersLoaded === following.length) {
         for (let i = 0; i < usersLoaded; i++) {
