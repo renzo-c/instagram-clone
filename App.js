@@ -14,6 +14,7 @@ import LoginScreen from "./components/auth/Login";
 import MainScreen from "./components/Main";
 import AddScreen from "./components/main/Add";
 import SaveScreen from "./components/main/Save";
+import CommentScreen from "./components/main/Comment";
 
 import { Text, View } from "react-native";
 
@@ -23,7 +24,7 @@ import rootReducer from "./redux/reducers";
 import thunk from "redux-thunk";
 
 // Temporarily hides warning about Setting a timer for a long period of time
-// LogBox.ignoreLogs(['Setting a timer']);
+LogBox.ignoreLogs(['Setting a timer']);
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
@@ -87,6 +88,7 @@ export default function App() {
           />
           <Stack.Screen name="Add" component={AddScreen} />
           <Stack.Screen name="Save" component={SaveScreen} />
+          <Stack.Screen name="Comment" component={CommentScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
