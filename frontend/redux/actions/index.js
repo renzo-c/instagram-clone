@@ -5,6 +5,7 @@ import {
   USER_POSTS_STATE_CHANGE,
   USER_FOLLOWING_STATE_CHANGE,
   USERS_DATA_STATE_CHANGE,
+  USERS_LIKES_STATE_CHANGE,
   USERS_POSTS_STATE_CHANGE,
 } from "../constants/index";
 
@@ -110,7 +111,6 @@ export function fetchUsersFollowingPosts(uid) {
       .get()
       .then((snapshot) => {
         const uid = snapshot.query.EP.path.segments[1];
-        // console.log({ snapshot, uid });
         const user = getState().usersState.users.find((el) => el.id === uid);
 
         const posts = snapshot.docs.map((doc) => {
@@ -118,9 +118,33 @@ export function fetchUsersFollowingPosts(uid) {
           const id = doc.id;
           return { id, ...data, user };
         });
-        // console.log(posts)
+        for(let i = 0; i< posts.length; i+=1) {
+          dispatch(fetchUsersFollowingLikes(uid, posts[i].id));
+        }
         dispatch({ type: USERS_POSTS_STATE_CHANGE, posts, uid });
-        // console.log(getState())
+      });
+  };
+}
+
+export function fetchUsersFollowingLikes(uid, postId) {
+  return (dispatch, getState) => {
+    firebase
+      .firestore()
+      .collection("posts")
+      .doc(uid)
+      .collection("userPosts")
+      .doc(postId)
+      .collection("likes")
+      .doc(firebase.auth().currentUser.uid)
+      .onSnapshot((snapshot) => {
+        const postId = snapshot.ZE.path.segments[3];
+
+        let currentUserLike = false;
+        if(snapshot.exists) {
+          currentUserLike = true;
+        }
+
+        dispatch({ type: USERS_LIKES_STATE_CHANGE, postId, currentUserLike });
       });
   };
 }

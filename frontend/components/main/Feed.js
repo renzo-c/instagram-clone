@@ -10,21 +10,39 @@ import { TextInput } from "react-native-gesture-handler";
 
 const Feed = (props) => {
   const [posts, setPosts] = useState([]);
-  const { following, users, usersFollowingLoaded, navigation } = props;
+  const { feed, following, users, usersFollowingLoaded, navigation } = props;
 
   useEffect(() => {
-    let posts = [];
-    if (usersFollowingLoaded === following.length) {
-      for (let i = 0; i < usersFollowingLoaded; i++) {
-        const user = users.find((el) => el.id === following[i]);
-        if (user !== undefined) {
-          posts = [...posts, ...user.posts];
-        }
-      }
-      posts.sort((x, y) => x.creation - y.creation);
+    if (usersFollowingLoaded === following.length && following.length !== 0) {
+      feed.sort((x, y) => x.creation - y.creation);
+      setPosts(feed);
     }
-    setPosts(posts);
-  }, [usersFollowingLoaded]);
+    console.log(posts);
+  }, [usersFollowingLoaded, feed]);
+
+  const onLikePress = (uid, postId) => {
+    firebase
+      .firestore()
+      .collection("posts")
+      .doc(uid)
+      .collection("userPosts")
+      .doc(postId)
+      .collection("likes")
+      .doc(firebase.auth().currentUser.uid)
+      .set({});
+  };
+
+  const onDislikePress = (uid, postId) => {
+    firebase
+      .firestore()
+      .collection("posts")
+      .doc(uid)
+      .collection("userPosts")
+      .doc(postId)
+      .collection("likes")
+      .doc(firebase.auth().currentUser.uid)
+      .delete();
+  };
 
   return (
     <View style={styles.container}>
@@ -37,6 +55,17 @@ const Feed = (props) => {
             <View style={styles.containerImage}>
               <Text>{item.user.name}</Text>
               <Image style={styles.image} source={{ uri: item.downloadURL }} />
+              {item.currentUserLike ? (
+                <Button
+                  title="Dislike"
+                  onPress={() => onDislikePress(item.user.id, item.id)}
+                />
+              ) : (
+                <Button
+                  title="Like"
+                  onPress={() => onLikePress(item.user.id, item.id)}
+                />
+              )}
               <Text
                 onPress={() =>
                   navigation.navigate("Comment", {
@@ -58,7 +87,7 @@ const Feed = (props) => {
 const mapStateToProps = (store) => ({
   currentUser: store.userState.currentUser,
   following: store.userState.following,
-  users: store.usersState.users,
+  feed: store.usersState.feed,
   usersFollowingLoaded: store.usersState.usersFollowingLoaded,
 });
 
