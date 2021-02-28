@@ -17,6 +17,7 @@ const Save = ({ navigation, route }) => {
     firebase.firestore().collection('posts').doc(firebase.auth().currentUser.uid).collection("userPosts").add({
         downloadURL,
         caption,
+        likesCount: 0,
         creation: firebase.firestore.FieldValue.serverTimestamp()
     }).then( () => navigation.popToTop())
   }

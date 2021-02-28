@@ -14,7 +14,7 @@ const Comment = (props) => {
   const [comments, setComments] = useState([]);
   const [postId, setPostId] = useState("");
   const [text, setText] = useState("");
-console.log({comments})
+
   useEffect(() => {
     const matchUserToComments = comments => {
       for(let i = 0; i < comments.length; i += 1) {

@@ -17,7 +17,6 @@ const Feed = (props) => {
       feed.sort((x, y) => x.creation - y.creation);
       setPosts(feed);
     }
-    console.log(posts);
   }, [usersFollowingLoaded, feed]);
 
   const onLikePress = (uid, postId) => {

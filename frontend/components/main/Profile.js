@@ -16,7 +16,7 @@ const Profile = (props) => {
   const {
     params: { uid },
   } = route;
-console.log(posts)
+
   const onFollow = () => {
     firebase
       .firestore()
